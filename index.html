@@ -4,181 +4,192 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Валентинка</title>
-
 <style>
 body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(135deg,#ffd6e8,#ffe6f2);
-text-align:center;
-overflow:hidden;
+  margin:0;
+  font-family:Arial;
+  background:linear-gradient(135deg,#ffd6e8,#ffe6f2);
+  text-align:center;
+  overflow:hidden;
 }
-
 .screen{
-display:none;
-height:100vh;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-padding:20px;
+  display:none;
+  height:100vh;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  padding:20px;
 }
-
 .active{display:flex;}
-
 button{
-padding:20px 50px;
-font-size:24px;
-border:none;
-border-radius:20px;
-cursor:pointer;
-margin:15px;
-transition:0.4s;
+  padding:20px 50px;
+  font-size:24px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  margin:15px;
+  transition:0.4s;
 }
-
 .yes{
-background:#ff4d88;
-color:white;
+  background:#ff4d88;
+  color:white;
+  position:relative;
+  z-index:1;
 }
-
 .no{
-background:#ccc;
-color:black;
+  background:#ccc;
+  color:black;
 }
-
 img{
-width:85%;
-max-width:320px;
-border-radius:20px;
-margin-top:20px;
+  width:85%;
+  max-width:320px;
+  border-radius:20px;
+  margin-top:20px;
 }
-
 .hint{
-opacity:0.6;
-font-size:14px;
-margin-top:8px;
+  opacity:0.6;
+  font-size:14px;
+  margin-top:8px;
+}
+#timer{
+  font-size:18px;
+  margin-top:10px;
+}
+.final-img{
+  width:80%;
+  max-width:350px;
+  margin-top:20px;
 }
 </style>
 </head>
-
 <body>
 
 <!-- Пароль -->
 <div id="passwordScreen" class="screen active">
-
 <h2>Привет ❤️</h2>
-
 <p>Введи дату начала отношений</p>
-
 <input id="passwordInput" type="password" style="padding:12px;font-size:18px;border-radius:12px;border:none;">
-
 <div class="hint">
 Подсказка: формат даты ДДММГГГГ
 </div>
-
 <button onclick="checkPassword()">Открыть</button>
-
 </div>
 
 <!-- Экран 1 -->
 <div id="screen1" class="screen">
-
 <h1>У меня есть кое‑что важное ❤️</h1>
-
 <button onclick="next(2)">Дальше</button>
-
 </div>
 
 <!-- Экран 2 -->
 <div id="screen2" class="screen">
-
 <!-- ЗАМЕНИ ССЫЛКУ НА СВОЮ ФОТКУ -->
 <img src="https://cdn.pixabay.com/photo/2017/01/31/13/14/heart-2024930_1280.png">
-
 <h2>У меня вопрос...</h2>
-
 <button onclick="next(3)">Продолжить</button>
-
 </div>
 
 <!-- Экран 3 -->
 <div id="screen3" class="screen">
-
 <h1 id="question">Будешь моей Валентинкой? ❤️</h1>
-
+<div id="timer"></div>
 <button id="yesBtn" class="yes">Да</button>
 <button id="noBtn" class="no">Нет</button>
-
 </div>
 
-<!-- Финал -->
+<!-- Экран 4: Финал -->
 <div id="screen4" class="screen">
-
-<h1>Я так рад ❤️</h1>
-
+<h1 id="finalText"></h1>
 <!-- ЗАМЕНИ ССЫЛКУ НА СВОЮ ФОТКУ -->
-<img src="https://cdn.pixabay.com/photo/2016/02/10/21/57/cat-1192026_1280.jpg">
-
+<img class="final-img" src="https://cdn.pixabay.com/photo/2016/02/10/21/57/cat-1192026_1280.jpg">
 </div>
 
 <script>
+// Прозвища
+let nicknames=["балам","радость моя"];
+let chosenNick=nicknames[0]; // сначала "балам"
 
+// Таймер отношений
+let startDate=new Date("2025-10-20");
+function updateTimer(){
+  let now=new Date();
+  let diff=now-startDate;
+  let days=Math.floor(diff/(1000*60*60*24));
+  let hours=Math.floor(diff/(1000*60*60)%24);
+  let minutes=Math.floor(diff/(1000*60)%60);
+  document.getElementById("timer").innerHTML="Мы вместе уже "+days+" дней "+hours+" часов "+minutes+" минут ❤️";
+}
+setInterval(updateTimer,1000);
+
+// Переход между экранами
 function next(num){
-document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-document.getElementById("screen"+num).classList.add("active");
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("screen"+num).classList.add("active");
 }
 
-// пароль
-function checkPassword(){
-let pass=document.getElementById("passwordInput").value;
+// Приветственный текст
+let startText="Привет, "+chosenNick+"... У меня есть кое-что важное для тебя";
+let i=0;
+function type(){if(i<startText.length){document.getElementById("screen1").querySelector("h1").innerHTML+=startText.charAt(i);i++;setTimeout(type,50);}}
+type();
 
-if(pass==="20102025"){
-next(1);
-}else{
-alert("Неверный формат даты 💔");
-}
-}
-
+// Кнопки Да/Нет
 let noClicks=0;
-
+let phrases=["Ты уверена?","Может подумаешь ещё?","Точно нет?","Мне будет грустно...","Последний шанс 😢"];
+const question=document.getElementById("question");
 const noBtn=document.getElementById("noBtn");
 const yesBtn=document.getElementById("yesBtn");
-const question=document.getElementById("question");
-
-let phrases=[
-"Ты уверена?",
-"Может подумаешь ещё?",
-"Точно нет?",
-"Мне будет грустно...",
-"Последний шанс 😢"
-];
 
 noBtn.onclick=()=>{
-
-noClicks++;
-
-if(noClicks<=5){
-
-// уменьшаем кнопку НЕТ
-let scale=1-(noClicks*0.18);
-noBtn.style.transform=`scale(${scale})`;
-noBtn.style.opacity=scale;
-
-// увеличиваем кнопку ДА
-let grow=1+(noClicks*0.25);
-yesBtn.style.transform=`scale(${grow})`;
-
-// меняем текст вопроса
-question.innerText=phrases[noClicks-1];
-}
-
-if(noClicks>=5){
-noBtn.style.display="none";
-}
+  noClicks++;
+  if(noClicks<=5){
+    // уменьшаем кнопку НЕТ
+    let scale=1-(noClicks*0.18);
+    noBtn.style.transform=`scale(${scale})`;
+    noBtn.style.opacity=scale;
+    // увеличиваем кнопку ДА
+    let grow=1+(noClicks*0.25);
+    yesBtn.style.transform=`scale(${grow})`;
+    yesBtn.style.marginTop="50px"; // держим отступ, чтобы не сдвигалась
+    // меняем текст вопроса
+    question.innerText=phrases[noClicks-1];
+  }
+  if(noClicks>=5){
+    noBtn.style.display="none";
+    // меняем прозвище на "радость моя"
+    chosenNick=nicknames[1];
+    showFinal();
+  }
 };
 
 yesBtn.onclick=()=>{
-next(4);
+  // увеличиваем кнопку Да
+  let w=parseInt(window.getComputedStyle(yesBtn).width);
+  let h=parseInt(window.getComputedStyle(yesBtn).height);
+  yesBtn.style.width=(w+40)+"px";
+  yesBtn.style.height=(h+20)+"px";
+  yesBtn.style.fontSize=(parseInt(window.getComputedStyle(yesBtn).fontSize)+4)+"px";
+  yesBtn.style.marginTop="50px"; // держим центр
+  chosenNick=nicknames[1];
+  showFinal();
 };
+
+// Финальный текст
+function showFinal(){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("screen4").classList.add("active");
+  document.getElementById("finalText").innerText="Урааа, я знал, что ты не ошибёшься с выбором, "+chosenNick+" ❤️";
+}
+
+// Пароль
+function checkPassword(){
+  let pass=document.getElementById("passwordInput").value;
+  if(pass==="20102025"){
+    next(1);
+  }else{
+    alert("Неверный формат даты 💔");
+  }
+}
 
 </script>
 </body>
