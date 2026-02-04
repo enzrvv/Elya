@@ -15,6 +15,7 @@ button{padding:20px 50px;font-size:24px;border:none;border-radius:20px;cursor:po
 img{width:90%;max-width:300px;border-radius:20px;margin:20px;box-shadow:0 0 20px rgba(0,0,0,0.2);}
 h1{font-size:9vw;}
 h2{font-size:6vw;}
+.final-img{width:80%;max-width:350px;margin-top:20px;}
 </style>
 </head>
 <body>
@@ -42,7 +43,7 @@ h2{font-size:6vw;}
 
 <!-- Экран 2: Фото + таймер -->
 <div class="screen" id="screen2">
-<img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400" alt="Эля">
+<img src="https://images.unsplash.com/photo-1602524205323-fd90b07b50be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400" alt="Сердечко">
 <h2>Мы начали встречаться 20 октября 2025 ❤️</h2>
 <h2 id="timer"></h2>
 <button onclick="next(3)">Дальше</button>
@@ -58,6 +59,7 @@ h2{font-size:6vw;}
 <!-- Экран 4: Финал -->
 <div class="screen" id="screen4">
 <h1>УРААА ❤️<br>Я знал, что ты не ошибёшься с выбором!</h1>
+<img class="final-img" src="https://images.unsplash.com/photo-1606851097028-07a0b6a1a3e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400" alt="Котик с цветами">
 </div>
 
 <script>
@@ -103,8 +105,11 @@ const yesBtn=document.getElementById("yesBtn");
 noBtn.addEventListener("click",()=>{
 noClicks++;
 if(noClicks<=5){
-  let newSize=24-3*noClicks;
-  noBtn.style.fontSize=newSize+"px";
+  // уменьшаем кнопку по размеру
+  let newSize=120-15*noClicks; // ширина
+  noBtn.style.width=newSize+"px";
+  noBtn.style.height=(newSize/2)+"px";
+  noBtn.style.fontSize=(24-3*noClicks)+"px";
   questionEl.innerText=questions[Math.min(noClicks-1,questions.length-1)];
 }
 if(noClicks>=5){
@@ -116,8 +121,11 @@ if(noClicks>=5){
 
 // Кнопка Да увеличивается
 yesBtn.addEventListener("click",()=>{
-  let currentSize=parseInt(window.getComputedStyle(yesBtn).fontSize);
-  yesBtn.style.fontSize=(currentSize+4)+"px";
+  let w=parseInt(window.getComputedStyle(yesBtn).width);
+  let h=parseInt(window.getComputedStyle(yesBtn).height);
+  yesBtn.style.width=(w+40)+"px";
+  yesBtn.style.height=(h+20)+"px";
+  yesBtn.style.fontSize=(parseInt(window.getComputedStyle(yesBtn).fontSize)+4)+"px";
   next(4);
   createHearts();
 });
