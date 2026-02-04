@@ -42,7 +42,7 @@ h2{font-size:6vw;}
 
 <!-- Экран 2: Фото + таймер -->
 <div class="screen" id="screen2">
-<img src="https://i.imgur.com/4AiXzf8.jpeg"> <!-- нормальная фотка -->
+<img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8c3dpdGNofHx8fHx8MTY4NzEyMzM5NQ&ixlib=rb-4.0.3&q=80&w=400" alt="Эля">
 <h2>Мы начали встречаться 20 октября 2025 ❤️</h2>
 <h2 id="timer"></h2>
 <button onclick="next(3)">Дальше</button>
@@ -50,8 +50,8 @@ h2{font-size:6vw;}
 
 <!-- Экран 3: Вопрос Да/Нет -->
 <div class="screen" id="screen3">
-<h1>Будешь моей Валентинкой? ❤️</h1>
-<button class="yes" onclick="yes()">Да</button>
+<h1 id="question">Будешь моей Валентинкой? ❤️</h1>
+<button class="yes" id="yesBtn">Да</button>
 <button class="no" id="noBtn">Нет</button>
 </div>
 
@@ -88,19 +88,32 @@ document.getElementById("screen"+num).classList.add("active");
 
 // Кнопки Да/Нет
 let noClicks=0;
-function yes(){next(4);createHearts();}
-function moveNo(){ 
-  let btn=document.getElementById("noBtn");
-  noClicks++;
-  let size=24-3*noClicks;
-  btn.style.fontSize=size+"px";
-  btn.style.position="absolute";
-  btn.style.left=Math.random()*80+"%";
-  btn.style.top=Math.random()*80+"%";
-  if(noClicks>=5){btn.style.display="none";}
+let questions=["Ты уверена?","Может не надо?","Просто подумай еще","Ты правда хочешь Нет?","Последний шанс отказаться"];
+const questionEl=document.getElementById("question");
+const noBtn=document.getElementById("noBtn");
+const yesBtn=document.getElementById("yesBtn");
+
+noBtn.addEventListener("click",()=>{
+noClicks++;
+if(noClicks<=5){
+  let newSize=24-3*noClicks;
+  noBtn.style.fontSize=newSize+"px";
+  questionEl.innerText=questions[Math.min(noClicks-1,questions.length-1)];
 }
-document.getElementById("noBtn").addEventListener("mouseover",moveNo);
-document.getElementById("noBtn").addEventListener("click",moveNo);
+if(noClicks>=5){
+  noBtn.style.display="none";
+  next(4);
+  createHearts();
+}
+});
+
+// Кнопка Да увеличивается
+yesBtn.addEventListener("click",()=>{
+  let currentSize=parseInt(window.getComputedStyle(yesBtn).fontSize);
+  yesBtn.style.fontSize=(currentSize+4)+"px";
+  next(4);
+  createHearts();
+});
 
 // Анимация сердечек
 function createHearts(){
