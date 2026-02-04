@@ -7,11 +7,12 @@
 <style>
 body{
   margin:0;
-  font-family:Arial;
+  font-family:Arial,sans-serif;
   background:linear-gradient(135deg,#ffd6e8,#ffe6f2);
   text-align:center;
   overflow:hidden;
 }
+
 .screen{
   display:none;
   height:100vh;
@@ -20,7 +21,9 @@ body{
   flex-direction:column;
   padding:20px;
 }
+
 .active{display:flex;}
+
 button{
   padding:20px 50px;
   font-size:24px;
@@ -30,31 +33,37 @@ button{
   margin:15px;
   transition:0.4s;
 }
+
 .yes{
   background:#ff4d88;
   color:white;
   position:relative;
   z-index:1;
 }
+
 .no{
   background:#ccc;
   color:black;
 }
+
 img{
   width:85%;
   max-width:320px;
   border-radius:20px;
   margin-top:20px;
 }
+
 .hint{
   opacity:0.6;
   font-size:14px;
   margin-top:8px;
 }
+
 #timer{
   font-size:18px;
   margin-top:10px;
 }
+
 .final-img{
   width:80%;
   max-width:350px;
@@ -69,39 +78,39 @@ img{
 <h2>Привет ❤️</h2>
 <p>Введи дату начала отношений</p>
 <input id="passwordInput" type="password" style="padding:12px;font-size:18px;border-radius:12px;border:none;">
-<div class="hint">
-Подсказка: формат даты ДДММГГГГ
-</div>
+<div class="hint">Подсказка: формат даты ДДММГГГГ</div>
 <button onclick="checkPassword()">Открыть</button>
 </div>
 
-<!-- Экран 1 -->
+<!-- Экран 1: Приветствие -->
 <div id="screen1" class="screen">
-<h1>У меня есть кое‑что важное ❤️</h1>
+<h1 id="typeText"></h1>
 <button onclick="next(2)">Дальше</button>
 </div>
 
-<!-- Экран 2 -->
+<!-- Экран 2: Фото + таймер -->
 <div id="screen2" class="screen">
 <!-- ЗАМЕНИ ССЫЛКУ НА СВОЮ ФОТКУ -->
-<img src="https://cdn.pixabay.com/photo/2017/01/31/13/14/heart-2024930_1280.png">
-<h2>У меня вопрос...</h2>
+<img src="https://cdn.pixabay.com/photo/2017/01/31/13/14/heart-2024930_1280.png" alt="Сердечко">
+<h2>Мы вместе с 20 октября 2025 ❤️</h2>
 <button onclick="next(3)">Продолжить</button>
 </div>
 
-<!-- Экран 3 -->
+<!-- Экран 3: Вопрос Да/Нет -->
 <div id="screen3" class="screen">
 <h1 id="question">Будешь моей Валентинкой? ❤️</h1>
 <div id="timer"></div>
-<button id="yesBtn" class="yes">Да</button>
-<button id="noBtn" class="no">Нет</button>
+<div style="display:flex;justify-content:center;align-items:center;flex-direction:column;">
+  <button id="yesBtn" class="yes">Да</button>
+  <button id="noBtn" class="no">Нет</button>
+</div>
 </div>
 
 <!-- Экран 4: Финал -->
 <div id="screen4" class="screen">
 <h1 id="finalText"></h1>
 <!-- ЗАМЕНИ ССЫЛКУ НА СВОЮ ФОТКУ -->
-<img class="final-img" src="https://cdn.pixabay.com/photo/2016/02/10/21/57/cat-1192026_1280.jpg">
+<img class="final-img" src="https://cdn.pixabay.com/photo/2016/02/10/21/57/cat-1192026_1280.jpg" alt="Котик с цветами">
 </div>
 
 <script>
@@ -130,7 +139,13 @@ function next(num){
 // Приветственный текст
 let startText="Привет, "+chosenNick+"... У меня есть кое-что важное для тебя";
 let i=0;
-function type(){if(i<startText.length){document.getElementById("screen1").querySelector("h1").innerHTML+=startText.charAt(i);i++;setTimeout(type,50);}}
+function type(){
+  if(i<startText.length){
+    document.getElementById("typeText").innerHTML+=startText.charAt(i);
+    i++;
+    setTimeout(type,50);
+  }
+}
 type();
 
 // Кнопки Да/Нет
@@ -150,7 +165,7 @@ noBtn.onclick=()=>{
     // увеличиваем кнопку ДА
     let grow=1+(noClicks*0.25);
     yesBtn.style.transform=`scale(${grow})`;
-    yesBtn.style.marginTop="50px"; // держим отступ, чтобы не сдвигалась
+    yesBtn.style.marginTop="50px"; // центрируем
     // меняем текст вопроса
     question.innerText=phrases[noClicks-1];
   }
@@ -190,7 +205,7 @@ function checkPassword(){
     alert("Неверный формат даты 💔");
   }
 }
-
 </script>
+
 </body>
 </html>
