@@ -11,7 +11,7 @@ body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#ff
 .active{display:flex;}
 button{padding:20px 50px;font-size:24px;border:none;border-radius:20px;cursor:pointer;margin:15px;transition:0.3s;}
 .yes{background:#ff4d88;color:white;}
-.no{background:#ccc;position:relative;}
+.no{background:#ccc;}
 img{width:90%;max-width:300px;border-radius:20px;margin:20px;box-shadow:0 0 20px rgba(0,0,0,0.2);}
 h1{font-size:9vw;}
 h2{font-size:6vw;}
@@ -42,7 +42,7 @@ h2{font-size:6vw;}
 
 <!-- Экран 2: Фото + таймер -->
 <div class="screen" id="screen2">
-<img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8c3dpdGNofHx8fHx8MTY4NzEyMzM5NQ&ixlib=rb-4.0.3&q=80&w=400" alt="Эля">
+<img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400" alt="Эля">
 <h2>Мы начали встречаться 20 октября 2025 ❤️</h2>
 <h2 id="timer"></h2>
 <button onclick="next(3)">Дальше</button>
@@ -63,7 +63,8 @@ h2{font-size:6vw;}
 <script>
 // Прозвища
 let nicknames=["солнышко","радость моя","счастье мое","балам","зая","маленьки","сядки"];
-document.getElementById("nickname").innerText=nicknames[Math.floor(Math.random()*nicknames.length)];
+let chosenNick=nicknames[Math.floor(Math.random()*nicknames.length)];
+document.getElementById("nickname").innerText=chosenNick;
 
 // Таймер отношений
 let startDate=new Date("2025-10-20");
@@ -86,9 +87,15 @@ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
 document.getElementById("screen"+num).classList.add("active");
 }
 
+// Приветственный текст
+let startText="Привет, "+chosenNick+"... У меня есть кое-что важное для тебя";
+let i=0;
+function type(){if(i<startText.length){document.getElementById("typeText").innerHTML+=startText.charAt(i);i++;setTimeout(type,50);}}
+type();
+
 // Кнопки Да/Нет
 let noClicks=0;
-let questions=["Ты уверена?","Может не надо?","Просто подумай еще","Ты правда хочешь Нет?","Последний шанс отказаться"];
+let questions=["Ты уверена?","Может не надо?","Просто подумай ещё","Ты правда хочешь Нет?","Последний шанс отказаться"];
 const questionEl=document.getElementById("question");
 const noBtn=document.getElementById("noBtn");
 const yesBtn=document.getElementById("yesBtn");
@@ -132,12 +139,6 @@ if(heart.offsetTop<0){heart.remove();clearInterval(fall);}
 },300);
 }
 
-// Приветственный текст
-let startText="Привет, "+nicknames[Math.floor(Math.random()*nicknames.length)]+"... У меня есть кое-что важное для тебя";
-let i=0;
-function type(){if(i<startText.length){document.getElementById("typeText").innerHTML+=startText.charAt(i);i++;setTimeout(type,50);}}
-type();
-
 // Проверка пароля
 function checkPassword(){
 let password=document.getElementById("passwordInput").value;
@@ -145,6 +146,5 @@ if(password==="20102025"){document.getElementById("passwordScreen").style.displa
 else{alert("Неверный пароль 💔");}
 }
 </script>
-
 </body>
 </html>
