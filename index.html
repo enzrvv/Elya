@@ -21,7 +21,7 @@ h2{font-size:6vw;}
 
 <!-- Пароль -->
 <div id="passwordScreen" style="position:fixed;width:100%;height:100%;background:#ffd6e8;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:1000;">
-<h2>Привет, sunshine ❤️</h2>
+<h2>Привет, <span id="nickname"></span> ❤️</h2>
 <p>Введи дату начала отношений</p>
 <input id="passwordInput" type="password" style="padding:10px;font-size:18px;border-radius:10px;border:none;">
 <button onclick="checkPassword()" style="margin-top:15px;padding:10px 25px;border:none;border-radius:15px;background:#ff4d88;color:white;font-size:18px;">Открыть</button>
@@ -42,7 +42,7 @@ h2{font-size:6vw;}
 
 <!-- Экран 2: Фото + таймер -->
 <div class="screen" id="screen2">
-<img src="https://i.imgur.com/9Yj1P6N.jpg"> <!-- сюда вставь свою фотку -->
+<img src="https://i.imgur.com/4AiXzf8.jpeg"> <!-- нормальная фотка -->
 <h2>Мы начали встречаться 20 октября 2025 ❤️</h2>
 <h2 id="timer"></h2>
 <button onclick="next(3)">Дальше</button>
@@ -52,15 +52,19 @@ h2{font-size:6vw;}
 <div class="screen" id="screen3">
 <h1>Будешь моей Валентинкой? ❤️</h1>
 <button class="yes" onclick="yes()">Да</button>
-<button class="no" id="noBtn" onmouseover="moveNo()">Нет</button>
+<button class="no" id="noBtn">Нет</button>
 </div>
 
 <!-- Экран 4: Финал -->
 <div class="screen" id="screen4">
-<h1>УРААА ❤️<br>Я знал, что ты сделает правильный выбор!</h1>
+<h1>УРААА ❤️<br>Я знал, что ты не ошибёшься с выбором!</h1>
 </div>
 
 <script>
+// Прозвища
+let nicknames=["солнышко","радость моя","счастье мое","балам","зая","маленьки","сядки"];
+document.getElementById("nickname").innerText=nicknames[Math.floor(Math.random()*nicknames.length)];
+
 // Таймер отношений
 let startDate=new Date("2025-10-20");
 function updateTimer(){
@@ -77,18 +81,46 @@ setInterval(updateTimer,1000);
 window.onload=()=>{setTimeout(()=>{document.getElementById("loader").style.display="none";},1500);}
 
 // Переход между экранами
-function next(num){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById("screen"+num).classList.add("active");}
+function next(num){
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById("screen"+num).classList.add("active");
+}
 
 // Кнопки Да/Нет
+let noClicks=0;
 function yes(){next(4);createHearts();}
-let size=20;
-function moveNo(){let btn=document.getElementById("noBtn");size-=2;btn.style.fontSize=size+"px";btn.style.position="absolute";btn.style.left=Math.random()*80+"%";btn.style.top=Math.random()*80+"%";if(size<=8){btn.style.display="none";}}
+function moveNo(){ 
+  let btn=document.getElementById("noBtn");
+  noClicks++;
+  let size=24-3*noClicks;
+  btn.style.fontSize=size+"px";
+  btn.style.position="absolute";
+  btn.style.left=Math.random()*80+"%";
+  btn.style.top=Math.random()*80+"%";
+  if(noClicks>=5){btn.style.display="none";}
+}
+document.getElementById("noBtn").addEventListener("mouseover",moveNo);
+document.getElementById("noBtn").addEventListener("click",moveNo);
 
 // Анимация сердечек
-function createHearts(){setInterval(()=>{let heart=document.createElement("div");heart.innerHTML="❤️";heart.style.position="absolute";heart.style.left=Math.random()*100+"%";heart.style.top="100%";heart.style.fontSize="30px";document.body.appendChild(heart);let fall=setInterval(()=>{heart.style.top=heart.offsetTop-2+"px";if(heart.offsetTop<0){heart.remove();clearInterval(fall);}},20);},300);}
+function createHearts(){
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.innerHTML="❤️";
+heart.style.position="absolute";
+heart.style.left=Math.random()*100+"%";
+heart.style.top="100%";
+heart.style.fontSize="30px";
+document.body.appendChild(heart);
+let fall=setInterval(()=>{
+heart.style.top=heart.offsetTop-2+"px";
+if(heart.offsetTop<0){heart.remove();clearInterval(fall);}
+},20);
+},300);
+}
 
 // Приветственный текст
-let startText="Привет, sunshine... У меня есть кое-что важное для тебя";
+let startText="Привет, "+nicknames[Math.floor(Math.random()*nicknames.length)]+"... У меня есть кое-что важное для тебя";
 let i=0;
 function type(){if(i<startText.length){document.getElementById("typeText").innerHTML+=startText.charAt(i);i++;setTimeout(type,50);}}
 type();
