@@ -146,7 +146,7 @@ button:active{
 
 <!-- ПОСЛЕДНИЙ ШАНС -->
 <div class="screen" id="lastChance">
-  <h1>Ну Элькаа, может все же?</h1>
+  <h1>Любимая, может все же?</h1>
   <img src="https://media.giphy.com/media/ncUEQ9eqNQV/giphy.gif">
   <button class="yes" id="lastYes">Да</button>
 </div>
@@ -167,7 +167,7 @@ const questions = [
   "Солнышко, подумай ещё 🥺",
   "Радость моя, ну же",
   "Счастье мое, ну пожалуйста",
-  "Ну Элькаа, может все же?"
+  "Элькаа, ну биин"
 ];
 
 const finalNickname = "радость моя";
@@ -185,7 +185,7 @@ function checkPass(){
   if(value === PASSWORD){
     go("welcome");
   } else {
-    alert("Неверный формат даты 💔");
+    alert("Неверный пароль 💔");
   }
 }
 
@@ -242,7 +242,7 @@ function hearts(){
   for(let i=0; i<60; i++){
     const h = document.createElement("div");
     h.className = "heart";
-    h.textContent = "❤️";
+    h.textContent = "🤍";
     h.style.left = Math.random()*100 + "vw";
     h.style.fontSize = 14 + Math.random()*24 + "px";
     h.style.animationDuration = 3 + Math.random()*3 + "s";
