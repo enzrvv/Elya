@@ -27,18 +27,23 @@ button{
   border:none;
   border-radius:20px;
   cursor:pointer;
-  margin:15px;
   transition: all 0.5s ease;
+  position: relative;
 }
 .yes{
   background:#ff4d88;
   color:white;
-  position:relative;
   z-index:1;
 }
 .no{
   background:#ccc;
   color:black;
+}
+button-container{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:30px;
 }
 img{
   width:85%;
@@ -84,7 +89,7 @@ img{
 <button onclick="checkPassword()">Открыть</button>
 </div>
 
-<!-- Экран 1: Приветствие -->
+<!-- Экран 1 -->
 <div id="screen1" class="screen">
 <h1 id="typeText"></h1>
 <button onclick="next(2)">Дальше</button>
@@ -92,7 +97,6 @@ img{
 
 <!-- Экран 2: GIF + дата + таймер -->
 <div id="screen2" class="screen">
-<!-- ЗДЕСЬ ВСТАВЬ СВОЙ GIF -->
 <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Сердечко GIF">
 <h2>Мы вместе с 20 октября 2025 ❤️</h2>
 <div id="timer"></div>
@@ -102,9 +106,8 @@ img{
 <!-- Экран 3: Вопрос Да/Нет -->
 <div id="screen3" class="screen">
 <h1 id="question">Будешь моей Валентинкой, балам? ❤️</h1>
-<!-- ЗДЕСЬ ВСТАВЬ СВОЙ GIF -->
 <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="GIF вопроса" style="width:50%; max-width:250px; margin:15px;">
-<div style="display:flex;justify-content:center;align-items:center;flex-direction:column;">
+<div class="button-container">
   <button id="yesBtn" class="yes">Да</button>
   <button id="noBtn" class="no">Нет</button>
 </div>
@@ -113,7 +116,6 @@ img{
 <!-- Экран 3.5: Последний шанс -->
 <div id="screen3_5" class="screen">
 <h1 id="lastQuestion">Ну Элькаа, может все же?</h1>
-<!-- ЗДЕСЬ ВСТАВЬ СВОЙ GIF -->
 <img src="https://media.giphy.com/media/xUPGcguWZHRC2HyBRS/giphy.gif" alt="GIF последний шанс" style="width:50%; max-width:250px; margin:15px;">
 <button id="finalYesBtn" class="yes">Да</button>
 </div>
@@ -121,7 +123,6 @@ img{
 <!-- Экран 4: Финал -->
 <div id="screen4" class="screen">
 <h1 id="finalText"></h1>
-<!-- ЗДЕСЬ ВСТАВЬ СВОЙ GIF -->
 <img class="final-img" src="https://media.giphy.com/media/12PA1eI8FBqEBa/giphy.gif" alt="Котик с цветами GIF">
 </div>
 
@@ -130,7 +131,7 @@ img{
 let nicknames=["балам","радость моя"];
 let chosenNick=nicknames[0];
 
-// Таймер отношений
+// Таймер
 let startDate=new Date("2025-10-20");
 function updateTimer(){
   let now=new Date();
@@ -142,7 +143,7 @@ function updateTimer(){
 }
 setInterval(updateTimer,1000);
 
-// Переход между экранами
+// Переходы
 function next(num){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("screen"+num).classList.add("active");
@@ -173,7 +174,7 @@ const question=document.getElementById("question");
 const noBtn=document.getElementById("noBtn");
 const yesBtn=document.getElementById("yesBtn");
 
-// Функция плавного увеличения кнопки Да
+// Анимация Да
 function growButton(btn){
   let size=parseInt(window.getComputedStyle(btn).fontSize);
   btn.style.fontSize=(size+4)+"px";
@@ -202,24 +203,26 @@ noBtn.onclick=()=>{
 yesBtn.onclick=()=>{ chosenNick=nicknames[1]; showFinal(); };
 document.getElementById("finalYesBtn").onclick=()=>{ chosenNick=nicknames[1]; showFinal(); };
 
-// Финальный экран + падающие сердечки
+// Финал + падающие сердечки
 function showFinal(){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("screen4").classList.add("active");
   document.getElementById("finalText").innerText="Урааа, я знал, что ты не ошибёшься с выбором, "+chosenNick+" ❤️";
-  createHearts();
+
+  // падающие сердечки
+  for(let i=0;i<50;i++){
+    setTimeout(createHeart, i*100);
+  }
 }
 
-// Падающие сердечки
-function createHearts(){
-  setInterval(()=>{
-    let heart=document.createElement("div");
-    heart.className="heart";
-    heart.innerText="❤️";
-    heart.style.left=Math.random()*90+"%";
-    document.body.appendChild(heart);
-    setTimeout(()=>{heart.remove();},4000);
-  },300);
+function createHeart(){
+  let heart=document.createElement("div");
+  heart.className="heart";
+  heart.innerText="❤️";
+  heart.style.left=Math.random()*90+"%";
+  heart.style.fontSize=(12+Math.random()*24)+"px";
+  document.body.appendChild(heart);
+  setTimeout(()=>{heart.remove();},4000);
 }
 
 // Пароль
