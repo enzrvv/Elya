@@ -4,155 +4,182 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Валентинка</title>
+
 <style>
-body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#ffd6e8,#ffe6f2);text-align:center;overflow:hidden;}
-#loader{position:fixed;width:100%;height:100%;background:#ffd6e8;display:flex;justify-content:center;align-items:center;font-size:30px;z-index:999;}
-.screen{display:none;height:100vh;padding:20px;box-sizing:border-box;justify-content:center;align-items:center;flex-direction:column;}
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#ffd6e8,#ffe6f2);
+text-align:center;
+overflow:hidden;
+}
+
+.screen{
+display:none;
+height:100vh;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+padding:20px;
+}
+
 .active{display:flex;}
-button{padding:20px 50px;font-size:24px;border:none;border-radius:20px;cursor:pointer;margin:15px;transition:0.3s;}
-.yes{background:#ff4d88;color:white;}
-.no{background:#ccc;}
-img{width:90%;max-width:300px;border-radius:20px;margin:20px;box-shadow:0 0 20px rgba(0,0,0,0.2);}
-h1{font-size:9vw;}
-h2{font-size:6vw;}
-.final-img{width:80%;max-width:350px;margin-top:20px;}
+
+button{
+padding:20px 50px;
+font-size:24px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+margin:15px;
+transition:0.4s;
+}
+
+.yes{
+background:#ff4d88;
+color:white;
+}
+
+.no{
+background:#ccc;
+color:black;
+}
+
+img{
+width:85%;
+max-width:320px;
+border-radius:20px;
+margin-top:20px;
+}
+
+.hint{
+opacity:0.6;
+font-size:14px;
+margin-top:8px;
+}
 </style>
 </head>
+
 <body>
 
 <!-- Пароль -->
-<div id="passwordScreen" style="position:fixed;width:100%;height:100%;background:#ffd6e8;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:1000;">
-<h2>Привет, <span id="nickname"></span> ❤️</h2>
+<div id="passwordScreen" class="screen active">
+
+<h2>Привет ❤️</h2>
+
 <p>Введи дату начала отношений</p>
-<input id="passwordInput" type="password" style="padding:10px;font-size:18px;border-radius:10px;border:none;">
-<button onclick="checkPassword()" style="margin-top:15px;padding:10px 25px;border:none;border-radius:15px;background:#ff4d88;color:white;font-size:18px;">Открыть</button>
+
+<input id="passwordInput" type="password" style="padding:12px;font-size:18px;border-radius:12px;border:none;">
+
+<div class="hint">
+Подсказка: формат даты ДДММГГГГ
 </div>
 
-<div id="loader">Загрузка ❤️</div>
+<button onclick="checkPassword()">Открыть</button>
 
-<!-- Музыка -->
-<audio autoplay loop>
-<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_3a8fa1bb2d.mp3">
-</audio>
-
-<!-- Экран 1: Приветствие -->
-<div class="screen active" id="screen1">
-<h1 id="typeText"></h1>
-<button onclick="next(2)">Продолжить</button>
 </div>
 
-<!-- Экран 2: Фото + таймер -->
-<div class="screen" id="screen2">
-<img src="https://images.unsplash.com/photo-1602524205323-fd90b07b50be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400" alt="Сердечко">
-<h2>Мы начали встречаться 20 октября 2025 ❤️</h2>
-<h2 id="timer"></h2>
-<button onclick="next(3)">Дальше</button>
+<!-- Экран 1 -->
+<div id="screen1" class="screen">
+
+<h1>У меня есть кое‑что важное ❤️</h1>
+
+<button onclick="next(2)">Дальше</button>
+
 </div>
 
-<!-- Экран 3: Вопрос Да/Нет -->
-<div class="screen" id="screen3">
+<!-- Экран 2 -->
+<div id="screen2" class="screen">
+
+<!-- ЗАМЕНИ ССЫЛКУ НА СВОЮ ФОТКУ -->
+<img src="https://cdn.pixabay.com/photo/2017/01/31/13/14/heart-2024930_1280.png">
+
+<h2>У меня вопрос...</h2>
+
+<button onclick="next(3)">Продолжить</button>
+
+</div>
+
+<!-- Экран 3 -->
+<div id="screen3" class="screen">
+
 <h1 id="question">Будешь моей Валентинкой? ❤️</h1>
-<button class="yes" id="yesBtn">Да</button>
-<button class="no" id="noBtn">Нет</button>
+
+<button id="yesBtn" class="yes">Да</button>
+<button id="noBtn" class="no">Нет</button>
+
 </div>
 
-<!-- Экран 4: Финал -->
-<div class="screen" id="screen4">
-<h1>УРААА ❤️<br>Я знал, что ты не ошибёшься с выбором!</h1>
-<img class="final-img" src="https://images.unsplash.com/photo-1606851097028-07a0b6a1a3e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400" alt="Котик с цветами">
+<!-- Финал -->
+<div id="screen4" class="screen">
+
+<h1>Я так рад ❤️</h1>
+
+<!-- ЗАМЕНИ ССЫЛКУ НА СВОЮ ФОТКУ -->
+<img src="https://cdn.pixabay.com/photo/2016/02/10/21/57/cat-1192026_1280.jpg">
+
 </div>
 
 <script>
-// Прозвища
-let nicknames=["солнышко","радость моя","счастье мое","балам","зая","маленьки","сядки"];
-let chosenNick=nicknames[Math.floor(Math.random()*nicknames.length)];
-document.getElementById("nickname").innerText=chosenNick;
 
-// Таймер отношений
-let startDate=new Date("2025-10-20");
-function updateTimer(){
-let now=new Date();
-let diff=now-startDate;
-let days=Math.floor(diff/(1000*60*60*24));
-let hours=Math.floor(diff/(1000*60*60)%24);
-let minutes=Math.floor(diff/(1000*60)%60);
-document.getElementById("timer").innerHTML="Мы вместе уже "+days+" дней "+hours+" часов "+minutes+" минут ❤️";
-}
-setInterval(updateTimer,1000);
-
-// Лоадер
-window.onload=()=>{setTimeout(()=>{document.getElementById("loader").style.display="none";},1500);}
-
-// Переход между экранами
 function next(num){
 document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
 document.getElementById("screen"+num).classList.add("active");
 }
 
-// Приветственный текст
-let startText="Привет, "+chosenNick+"... У меня есть кое-что важное для тебя";
-let i=0;
-function type(){if(i<startText.length){document.getElementById("typeText").innerHTML+=startText.charAt(i);i++;setTimeout(type,50);}}
-type();
+// пароль
+function checkPassword(){
+let pass=document.getElementById("passwordInput").value;
 
-// Кнопки Да/Нет
+if(pass==="20102025"){
+next(1);
+}else{
+alert("Неверный формат даты 💔");
+}
+}
+
 let noClicks=0;
-let questions=["Ты уверена?","Может не надо?","Просто подумай ещё","Ты правда хочешь Нет?","Последний шанс отказаться"];
-const questionEl=document.getElementById("question");
+
 const noBtn=document.getElementById("noBtn");
 const yesBtn=document.getElementById("yesBtn");
+const question=document.getElementById("question");
 
-noBtn.addEventListener("click",()=>{
+let phrases=[
+"Ты уверена?",
+"Может подумаешь ещё?",
+"Точно нет?",
+"Мне будет грустно...",
+"Последний шанс 😢"
+];
+
+noBtn.onclick=()=>{
+
 noClicks++;
+
 if(noClicks<=5){
-  // уменьшаем кнопку по размеру
-  let newSize=120-15*noClicks; // ширина
-  noBtn.style.width=newSize+"px";
-  noBtn.style.height=(newSize/2)+"px";
-  noBtn.style.fontSize=(24-3*noClicks)+"px";
-  questionEl.innerText=questions[Math.min(noClicks-1,questions.length-1)];
+
+// уменьшаем кнопку НЕТ
+let scale=1-(noClicks*0.18);
+noBtn.style.transform=`scale(${scale})`;
+noBtn.style.opacity=scale;
+
+// увеличиваем кнопку ДА
+let grow=1+(noClicks*0.25);
+yesBtn.style.transform=`scale(${grow})`;
+
+// меняем текст вопроса
+question.innerText=phrases[noClicks-1];
 }
+
 if(noClicks>=5){
-  noBtn.style.display="none";
-  next(4);
-  createHearts();
+noBtn.style.display="none";
 }
-});
+};
 
-// Кнопка Да увеличивается
-yesBtn.addEventListener("click",()=>{
-  let w=parseInt(window.getComputedStyle(yesBtn).width);
-  let h=parseInt(window.getComputedStyle(yesBtn).height);
-  yesBtn.style.width=(w+40)+"px";
-  yesBtn.style.height=(h+20)+"px";
-  yesBtn.style.fontSize=(parseInt(window.getComputedStyle(yesBtn).fontSize)+4)+"px";
-  next(4);
-  createHearts();
-});
+yesBtn.onclick=()=>{
+next(4);
+};
 
-// Анимация сердечек
-function createHearts(){
-setInterval(()=>{
-let heart=document.createElement("div");
-heart.innerHTML="❤️";
-heart.style.position="absolute";
-heart.style.left=Math.random()*100+"%";
-heart.style.top="100%";
-heart.style.fontSize="30px";
-document.body.appendChild(heart);
-let fall=setInterval(()=>{
-heart.style.top=heart.offsetTop-2+"px";
-if(heart.offsetTop<0){heart.remove();clearInterval(fall);}
-},20);
-},300);
-}
-
-// Проверка пароля
-function checkPassword(){
-let password=document.getElementById("passwordInput").value;
-if(password==="20102025"){document.getElementById("passwordScreen").style.display="none";}
-else{alert("Неверный пароль 💔");}
-}
 </script>
 </body>
 </html>
