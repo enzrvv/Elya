@@ -12,7 +12,6 @@ body{
   text-align:center;
   overflow:hidden;
 }
-
 .screen{
   display:none;
   height:100vh;
@@ -21,9 +20,7 @@ body{
   flex-direction:column;
   padding:20px;
 }
-
 .active{display:flex;}
-
 button{
   padding:20px 50px;
   font-size:24px;
@@ -33,41 +30,46 @@ button{
   margin:15px;
   transition:0.4s;
 }
-
 .yes{
   background:#ff4d88;
   color:white;
   position:relative;
   z-index:1;
 }
-
 .no{
   background:#ccc;
   color:black;
 }
-
 img{
   width:85%;
   max-width:320px;
   border-radius:20px;
   margin-top:20px;
 }
-
 .hint{
   opacity:0.6;
   font-size:14px;
   margin-top:8px;
 }
-
 #timer{
   font-size:18px;
   margin-top:10px;
 }
-
 .final-img{
   width:80%;
   max-width:350px;
   margin-top:20px;
+}
+.heart{
+  position:absolute;
+  font-size:24px;
+  color:#ff4d88;
+  pointer-events:none;
+  animation:fall 4s linear forwards;
+}
+@keyframes fall{
+  0%{transform: translateY(0) scale(1);}
+  100%{transform: translateY(100vh) scale(0.5); opacity:0;}
 }
 </style>
 </head>
@@ -171,8 +173,7 @@ noBtn.onclick=()=>{
   }
   if(noClicks>=5){
     noBtn.style.display="none";
-    // меняем прозвище на "радость моя"
-    chosenNick=nicknames[1];
+    chosenNick=nicknames[1]; // меняем прозвище
     showFinal();
   }
 };
@@ -194,6 +195,19 @@ function showFinal(){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("screen4").classList.add("active");
   document.getElementById("finalText").innerText="Урааа, я знал, что ты не ошибёшься с выбором, "+chosenNick+" ❤️";
+  createHearts();
+}
+
+// Создание падающих сердечек
+function createHearts(){
+  setInterval(()=>{
+    let heart=document.createElement("div");
+    heart.className="heart";
+    heart.innerText="❤️";
+    heart.style.left=Math.random()*90+"%";
+    document.body.appendChild(heart);
+    setTimeout(()=>{heart.remove();},4000);
+  },300);
 }
 
 // Пароль
@@ -206,6 +220,5 @@ function checkPassword(){
   }
 }
 </script>
-
 </body>
 </html>
