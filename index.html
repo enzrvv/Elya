@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Валентинка</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#ffd6e8,#ffe6f2);text-align:center;overflow:hidden;}
+#loader{position:fixed;width:100%;height:100%;background:#ffd6e8;display:flex;justify-content:center;align-items:center;font-size:30px;z-index:999;}
+.screen{display:none;height:100vh;padding:20px;box-sizing:border-box;justify-content:center;align-items:center;flex-direction:column;}
+.active{display:flex;}
+button{padding:20px 50px;font-size:24px;border:none;border-radius:20px;cursor:pointer;margin:15px;transition:0.3s;}
+.yes{background:#ff4d88;color:white;}
+.no{background:#ccc;position:relative;}
+img{width:90%;max-width:300px;border-radius:20px;margin:20px;box-shadow:0 0 20px rgba(0,0,0,0.2);}
+h1{font-size:9vw;}
+h2{font-size:6vw;}
+</style>
+</head>
+<body>
+
+<!-- Пароль -->
+<div id="passwordScreen" style="position:fixed;width:100%;height:100%;background:#ffd6e8;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:1000;">
+<h2>Привет, sunshine ❤️</h2>
+<p>Введи дату начала отношений</p>
+<input id="passwordInput" type="password" style="padding:10px;font-size:18px;border-radius:10px;border:none;">
+<button onclick="checkPassword()" style="margin-top:15px;padding:10px 25px;border:none;border-radius:15px;background:#ff4d88;color:white;font-size:18px;">Открыть</button>
+</div>
+
+<div id="loader">Загрузка ❤️</div>
+
+<!-- Музыка -->
+<audio autoplay loop>
+<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_3a8fa1bb2d.mp3">
+</audio>
+
+<!-- Экран 1: Приветствие -->
+<div class="screen active" id="screen1">
+<h1 id="typeText"></h1>
+<button onclick="next(2)">Продолжить</button>
+</div>
+
+<!-- Экран 2: Фото + таймер -->
+<div class="screen" id="screen2">
+<img src="https://i.imgur.com/9Yj1P6N.jpg"> <!-- сюда вставь свою фотку -->
+<h2>Мы начали встречаться 20 октября 2025 ❤️</h2>
+<h2 id="timer"></h2>
+<button onclick="next(3)">Дальше</button>
+</div>
+
+<!-- Экран 3: Вопрос Да/Нет -->
+<div class="screen" id="screen3">
+<h1>Будешь моей Валентинкой? ❤️</h1>
+<button class="yes" onclick="yes()">Да</button>
+<button class="no" id="noBtn" onmouseover="moveNo()">Нет</button>
+</div>
+
+<!-- Экран 4: Финал -->
+<div class="screen" id="screen4">
+<h1>УРААА ❤️<br>Я знал, что ты сделает правильный выбор!</h1>
+</div>
+
+<script>
+// Таймер отношений
+let startDate=new Date("2025-10-20");
+function updateTimer(){
+let now=new Date();
+let diff=now-startDate;
+let days=Math.floor(diff/(1000*60*60*24));
+let hours=Math.floor(diff/(1000*60*60)%24);
+let minutes=Math.floor(diff/(1000*60)%60);
+document.getElementById("timer").innerHTML="Мы вместе уже "+days+" дней "+hours+" часов "+minutes+" минут ❤️";
+}
+setInterval(updateTimer,1000);
+
+// Лоадер
+window.onload=()=>{setTimeout(()=>{document.getElementById("loader").style.display="none";},1500);}
+
+// Переход между экранами
+function next(num){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById("screen"+num).classList.add("active");}
+
+// Кнопки Да/Нет
+function yes(){next(4);createHearts();}
+let size=20;
+function moveNo(){let btn=document.getElementById("noBtn");size-=2;btn.style.fontSize=size+"px";btn.style.position="absolute";btn.style.left=Math.random()*80+"%";btn.style.top=Math.random()*80+"%";if(size<=8){btn.style.display="none";}}
+
+// Анимация сердечек
+function createHearts(){setInterval(()=>{let heart=document.createElement("div");heart.innerHTML="❤️";heart.style.position="absolute";heart.style.left=Math.random()*100+"%";heart.style.top="100%";heart.style.fontSize="30px";document.body.appendChild(heart);let fall=setInterval(()=>{heart.style.top=heart.offsetTop-2+"px";if(heart.offsetTop<0){heart.remove();clearInterval(fall);}},20);},300);}
+
+// Приветственный текст
+let startText="Привет, sunshine... У меня есть кое-что важное для тебя";
+let i=0;
+function type(){if(i<startText.length){document.getElementById("typeText").innerHTML+=startText.charAt(i);i++;setTimeout(type,50);}}
+type();
+
+// Проверка пароля
+function checkPassword(){
+let password=document.getElementById("passwordInput").value;
+if(password==="20102025"){document.getElementById("passwordScreen").style.display="none";}
+else{alert("Неверный пароль 💔");}
+}
+</script>
+
+</body>
+</html>
