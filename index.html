@@ -7,7 +7,7 @@
 <style>
 body{
   margin:0;
-  font-family:Arial,sans-serif;
+  font-family:Arial;
   background:linear-gradient(135deg,#ffd6e8,#ffe6f2);
   text-align:center;
   overflow:hidden;
@@ -68,7 +68,7 @@ img{
   animation:fall 4s linear forwards;
 }
 @keyframes fall{
-  0%{transform: translateY(0) scale(1);}
+  0%{transform: translateY(0) scale(1); opacity:1;}
   100%{transform: translateY(100vh) scale(0.5); opacity:0;}
 }
 </style>
@@ -100,7 +100,7 @@ img{
 
 <!-- Экран 3: Вопрос Да/Нет -->
 <div id="screen3" class="screen">
-<h1 id="question">Будешь моей Валентинкой? ❤️</h1>
+<h1 id="question">Будешь моей Валентинкой, балам? ❤️</h1>
 <div id="timer"></div>
 <div style="display:flex;justify-content:center;align-items:center;flex-direction:column;">
   <button id="yesBtn" class="yes">Да</button>
@@ -138,7 +138,7 @@ function next(num){
   document.getElementById("screen"+num).classList.add("active");
 }
 
-// Приветственный текст
+// Печатающий текст
 let startText="Привет, "+chosenNick+"... У меня есть кое-что важное для тебя";
 let i=0;
 function type(){
@@ -152,7 +152,13 @@ type();
 
 // Кнопки Да/Нет
 let noClicks=0;
-let phrases=["Ты уверена?","Может подумаешь ещё?","Точно нет?","Мне будет грустно...","Последний шанс 😢"];
+let phrases=[
+"Ты уверена?",
+"Может подумаешь ещё?",
+"Точно нет?",
+"Мне будет грустно...",
+"Последний шанс 😢"
+];
 const question=document.getElementById("question");
 const noBtn=document.getElementById("noBtn");
 const yesBtn=document.getElementById("yesBtn");
@@ -160,37 +166,33 @@ const yesBtn=document.getElementById("yesBtn");
 noBtn.onclick=()=>{
   noClicks++;
   if(noClicks<=5){
-    // уменьшаем кнопку НЕТ
     let scale=1-(noClicks*0.18);
     noBtn.style.transform=`scale(${scale})`;
     noBtn.style.opacity=scale;
-    // увеличиваем кнопку ДА
     let grow=1+(noClicks*0.25);
     yesBtn.style.transform=`scale(${grow})`;
-    yesBtn.style.marginTop="50px"; // центрируем
-    // меняем текст вопроса
+    yesBtn.style.marginTop="50px"; // держим центр
     question.innerText=phrases[noClicks-1];
   }
   if(noClicks>=5){
     noBtn.style.display="none";
-    chosenNick=nicknames[1]; // меняем прозвище
+    chosenNick=nicknames[1]; // меняем прозвище на "радость моя"
     showFinal();
   }
 };
 
 yesBtn.onclick=()=>{
-  // увеличиваем кнопку Да
   let w=parseInt(window.getComputedStyle(yesBtn).width);
   let h=parseInt(window.getComputedStyle(yesBtn).height);
   yesBtn.style.width=(w+40)+"px";
   yesBtn.style.height=(h+20)+"px";
   yesBtn.style.fontSize=(parseInt(window.getComputedStyle(yesBtn).fontSize)+4)+"px";
-  yesBtn.style.marginTop="50px"; // держим центр
+  yesBtn.style.marginTop="50px";
   chosenNick=nicknames[1];
   showFinal();
 };
 
-// Финальный текст
+// Финальный экран + падающие сердечки
 function showFinal(){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("screen4").classList.add("active");
@@ -198,7 +200,6 @@ function showFinal(){
   createHearts();
 }
 
-// Создание падающих сердечек
 function createHearts(){
   setInterval(()=>{
     let heart=document.createElement("div");
@@ -220,5 +221,6 @@ function checkPassword(){
   }
 }
 </script>
+
 </body>
 </html>
