@@ -2,238 +2,254 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Валентинка Premium</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Валентинка ❤️</title>
+
 <style>
-body{
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
   margin:0;
-  font-family:Arial,sans-serif;
+  width:100%;
+  height:100%;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;
   background:linear-gradient(135deg,#ffd6e8,#ffe6f2);
-  text-align:center;
   overflow:hidden;
+  color:#5a1a33;
 }
+
 .screen{
+  position:absolute;
+  inset:0;
   display:none;
-  height:100vh;
-  justify-content:center;
-  align-items:center;
   flex-direction:column;
-  padding:20px;
-}
-.active{display:flex;}
-button{
-  padding:20px 50px;
-  font-size:24px;
-  border:none;
-  border-radius:20px;
-  cursor:pointer;
-  transition: all 0.5s ease;
-  position: relative;
-}
-.yes{
-  background:#ff4d88;
-  color:white;
-  z-index:1;
-}
-.no{
-  background:#ccc;
-  color:black;
-}
-button-container{
-  display:flex;
   justify-content:center;
   align-items:center;
-  gap:30px;
+  text-align:center;
+  padding:24px;
 }
+
+.screen.active{
+  display:flex;
+}
+
+h1,h2,p{
+  margin:0 0 16px;
+}
+
 img{
   width:85%;
   max-width:320px;
   border-radius:20px;
-  margin-top:20px;
+  margin:16px 0;
 }
-.hint{
-  opacity:0.6;
-  font-size:14px;
-  margin-top:8px;
-}
-#timer{
+
+/* ВВОД */
+input{
+  padding:14px;
   font-size:18px;
+  border:none;
+  border-radius:14px;
+  text-align:center;
+}
+
+/* КНОПКИ */
+button{
+  padding:18px 48px;
+  font-size:20px;
+  font-weight:600;
+  border:none;
+  border-radius:999px;
+  cursor:pointer;
+  transition:transform .25s ease,opacity .25s ease;
+}
+
+button:active{
+  transform:scale(1.1);
+}
+
+.yes{
+  background:linear-gradient(135deg,#ff4d88,#ff6fa5);
+  color:white;
+  box-shadow:0 12px 30px rgba(255,77,136,.4);
+}
+
+.no{
+  background:rgba(255,255,255,.6);
+  color:#5a1a33;
+}
+
+.buttons{
+  display:flex;
+  gap:24px;
   margin-top:10px;
 }
-.final-img{
-  width:80%;
-  max-width:350px;
-  margin-top:20px;
+
+/* ТАЙМЕР */
+#timer{
+  font-size:18px;
 }
+
+/* СЕРДЦА */
 .heart{
   position:absolute;
-  font-size:24px;
-  color:#ff4d88;
+  top:-20px;
   pointer-events:none;
-  animation:fall 4s linear forwards;
+  animation:fall linear forwards;
 }
+
 @keyframes fall{
-  0%{transform: translateY(0) scale(1); opacity:1;}
-  100%{transform: translateY(100vh) scale(0.5); opacity:0;}
+  to{
+    transform:translateY(110vh);
+    opacity:0;
+  }
 }
 </style>
 </head>
+
 <body>
 
-<!-- Пароль -->
-<div id="passwordScreen" class="screen active">
-<h2>Привет ❤️</h2>
-<p>Введи дату начала отношений</p>
-<input id="passwordInput" type="password" style="padding:12px;font-size:18px;border-radius:12px;border:none;">
-<div class="hint">Подсказка: формат даты ДДММГГГГ</div>
-<button onclick="checkPassword()">Открыть</button>
+<!-- ПАРОЛЬ -->
+<div class="screen active" id="password">
+  <h2>Привет ❤️</h2>
+  <p>Введи дату начала отношений</p>
+  <input type="password" id="pass" placeholder="ДДММГГГГ">
+  <p style="opacity:.6;font-size:14px;">Подсказка: формат даты</p>
+  <button class="yes" onclick="checkPass()">Открыть</button>
 </div>
 
-<!-- Экран 1 -->
-<div id="screen1" class="screen">
-<h1 id="typeText"></h1>
-<button onclick="next(2)">Дальше</button>
+<!-- ПРИВЕТСТВИЕ -->
+<div class="screen" id="welcome">
+  <h1 id="typing"></h1>
+  <button class="yes" onclick="go('timerScreen')">Дальше</button>
 </div>
 
-<!-- Экран 2: GIF + дата + таймер -->
-<div id="screen2" class="screen">
-<img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Сердечко GIF">
-<h2>Мы вместе с 20 октября 2025 ❤️</h2>
-<div id="timer"></div>
-<button onclick="next(3)">Продолжить</button>
+<!-- ДАТА + ТАЙМЕР -->
+<div class="screen" id="timerScreen">
+  <h2>20 октября 2025 ❤️</h2>
+  <div id="timer"></div>
+  <img src="GIF_LINK_HERE">
+  <button class="yes" onclick="go('questionScreen')">Дальше</button>
 </div>
 
-<!-- Экран 3: Вопрос Да/Нет -->
-<div id="screen3" class="screen">
-<h1 id="question">Будешь моей Валентинкой, балам? ❤️</h1>
-<img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="GIF вопроса" style="width:50%; max-width:250px; margin:15px;">
-<div class="button-container">
-  <button id="yesBtn" class="yes">Да</button>
-  <button id="noBtn" class="no">Нет</button>
-</div>
-</div>
-
-<!-- Экран 3.5: Последний шанс -->
-<div id="screen3_5" class="screen">
-<h1 id="lastQuestion">Ну Элькаа, может все же?</h1>
-<img src="https://media.giphy.com/media/xUPGcguWZHRC2HyBRS/giphy.gif" alt="GIF последний шанс" style="width:50%; max-width:250px; margin:15px;">
-<button id="finalYesBtn" class="yes">Да</button>
+<!-- ВОПРОС -->
+<div class="screen" id="questionScreen">
+  <h1 id="questionText"></h1>
+  <img src="GIF_LINK_HERE">
+  <div class="buttons">
+    <button class="yes" id="yesBtn">Да</button>
+    <button class="no" id="noBtn">Нет</button>
+  </div>
 </div>
 
-<!-- Экран 4: Финал -->
-<div id="screen4" class="screen">
-<h1 id="finalText"></h1>
-<img class="final-img" src="https://media.giphy.com/media/12PA1eI8FBqEBa/giphy.gif" alt="Котик с цветами GIF">
+<!-- ПОСЛЕДНИЙ ШАНС -->
+<div class="screen" id="lastChance">
+  <h1>Ну Элькаа, может все же?</h1>
+  <img src="GIF_LINK_HERE">
+  <button class="yes" id="lastYes">Да</button>
+</div>
+
+<!-- ФИНАЛ -->
+<div class="screen" id="final">
+  <h1 id="finalText"></h1>
+  <img src="GIF_LINK_HERE">
 </div>
 
 <script>
-// Прозвища
-let nicknames=["балам","радость моя"];
-let chosenNick=nicknames[0];
+/* НАСТРОЙКИ */
+const PASSWORD="20102025";
+const START_DATE=new Date("2025-10-20T00:00:00");
 
-// Таймер
-let startDate=new Date("2025-10-20");
-function updateTimer(){
-  let now=new Date();
-  let diff=now-startDate;
-  let days=Math.floor(diff/(1000*60*60*24));
-  let hours=Math.floor(diff/(1000*60*60)%24);
-  let minutes=Math.floor(diff/(1000*60)%60);
-  document.getElementById("timer").innerHTML="Мы вместе уже "+days+" дней "+hours+" часов "+minutes+" минут ❤️";
-}
-setInterval(updateTimer,1000);
+const questions=[
+  "Будешь моей Валентинкой, балам?",
+  "Солнышко, подумай ещё 🥺",
+  "Радость моя, ну же",
+  "Счастье мое, я жду",
+  "Балам, последний шанс ❤️"
+];
 
-// Переходы
-function next(num){
+const finalNickname="радость моя";
+
+let noClicks=0;
+
+/* НАВИГАЦИЯ */
+function go(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById("screen"+num).classList.add("active");
+  document.getElementById(id).classList.add("active");
 }
 
-// Печатающий текст
-let startText="Привет, "+chosenNick+"... У меня есть кое-что важное для тебя";
-let i=0;
-function type(){
-  if(i<startText.length){
-    document.getElementById("typeText").innerHTML+=startText.charAt(i);
-    i++;
-    setTimeout(type,50);
+/* ПАРОЛЬ */
+function checkPass(){
+  if(document.getElementById("pass").value===PASSWORD){
+    go("welcome");
   }
 }
-type();
 
-// Кнопки Да/Нет
-let noClicks=0;
-let phrases=[
-"Ты уверена?",
-"Может подумаешь ещё?",
-"Точно нет?",
-"Мне будет грустно...",
-"Последний шанс 😢"
-]; 
-const question=document.getElementById("question");
-const noBtn=document.getElementById("noBtn");
+/* ПЕЧАТАЮЩИЙ ТЕКСТ */
+const text="Привет, балам ❤️";
+let t=0;
+const typeInt=setInterval(()=>{
+  document.getElementById("typing").textContent=text.slice(0,++t);
+  if(t===text.length) clearInterval(typeInt);
+},100);
+
+/* ТАЙМЕР */
+setInterval(()=>{
+  const diff=new Date()-START_DATE;
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor(diff/3600000)%24;
+  const m=Math.floor(diff/60000)%60;
+  document.getElementById("timer").textContent=
+    `Мы вместе ${d} дней ${h} часов ${m} минут ❤️`;
+},1000);
+
+/* ВОПРОСЫ */
+const qText=document.getElementById("questionText");
 const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
 
-// Анимация Да
-function growButton(btn){
-  let size=parseInt(window.getComputedStyle(btn).fontSize);
-  btn.style.fontSize=(size+4)+"px";
-  let w=parseInt(window.getComputedStyle(btn).width);
-  let h=parseInt(window.getComputedStyle(btn).height);
-  btn.style.width=(w+40)+"px";
-  btn.style.height=(h+20)+"px";
-}
+qText.textContent=questions[0];
 
 noBtn.onclick=()=>{
   noClicks++;
-  if(noClicks<=5){
-    let scale=1-(noClicks*0.18);
-    noBtn.style.transform=`scale(${scale})`;
-    noBtn.style.opacity=scale;
-    growButton(yesBtn);
-    yesBtn.style.marginTop="50px";
-    question.innerText=phrases[noClicks-1];
-  }
-  if(noClicks==5){
-    document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-    document.getElementById("screen3_5").classList.add("active");
+  if(noClicks<questions.length){
+    qText.textContent=questions[noClicks];
+    yesBtn.style.transform=`scale(${1+noClicks*0.15})`;
+    noBtn.style.transform=`scale(${1-noClicks*0.15})`;
+    noBtn.style.opacity=1-noClicks*0.2;
+  }else{
+    go("lastChance");
   }
 };
 
-yesBtn.onclick=()=>{ chosenNick=nicknames[1]; showFinal(); };
-document.getElementById("finalYesBtn").onclick=()=>{ chosenNick=nicknames[1]; showFinal(); };
+yesBtn.onclick=finish;
+document.getElementById("lastYes").onclick=finish;
 
-// Финал + падающие сердечки
-function showFinal(){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById("screen4").classList.add("active");
-  document.getElementById("finalText").innerText="Урааа, я знал, что ты не ошибёшься с выбором, "+chosenNick+" ❤️";
-
-  // падающие сердечки
-  for(let i=0;i<50;i++){
-    setTimeout(createHeart, i*100);
-  }
+/* ФИНАЛ */
+function finish(){
+  go("final");
+  document.getElementById("finalText").textContent=
+    `Урааа, я знал, что ты не ошибёшься с выбором, ${finalNickname} ❤️`;
+  hearts();
 }
 
-function createHeart(){
-  let heart=document.createElement("div");
-  heart.className="heart";
-  heart.innerText="❤️";
-  heart.style.left=Math.random()*90+"%";
-  heart.style.fontSize=(12+Math.random()*24)+"px";
-  document.body.appendChild(heart);
-  setTimeout(()=>{heart.remove();},4000);
-}
-
-// Пароль
-function checkPassword(){
-  let pass=document.getElementById("passwordInput").value;
-  if(pass==="20102025"){
-    next(1);
-  }else{
-    alert("Неверный формат даты 💔");
+/* СЕРДЦА */
+function hearts(){
+  for(let i=0;i<60;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=14+Math.random()*24+"px";
+    h.style.animationDuration=3+Math.random()*3+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
   }
 }
 </script>
+
 </body>
 </html>
