@@ -95,6 +95,7 @@ button:active{
   top:-20px;
   pointer-events:none;
   animation:fall linear forwards;
+  opacity:1;
 }
 
 @keyframes fall{
@@ -224,7 +225,6 @@ noBtn.onclick = () => {
     yesBtn.style.transform = `scale(${1 + noClicks*0.15})`;
     noBtn.style.transform = `scale(${1 - noClicks*0.15})`;
     noBtn.style.opacity = 1 - noClicks*0.2;
-    if(navigator.vibrate) navigator.vibrate(60);
   } else {
     go("lastChance");
   }
@@ -244,9 +244,10 @@ function finish(){
       const t = document.createElement("div");
       t.className = "love-text";
       t.textContent = "Я люблю тебя 💖";
-      t.style.left = Math.random()*100 + "vw";
-      t.style.fontSize = 14 + Math.random()*20 + "px";
-      t.style.animationDuration = 2 + Math.random()*2 + "s";
+      t.style.left = 20 + Math.random()*60 + "vw";
+      t.style.fontSize = 16 + Math.random()*18 + "px";
+      t.style.animationDuration = 3 + Math.random()*2 + "s";
+      t.style.opacity = 0.8;
       document.body.appendChild(t);
       setTimeout(()=>t.remove(), 4000);
     }
