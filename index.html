@@ -132,6 +132,7 @@ button:active{
   <h2>Привет ❤️</h2>
   <p>Введи дату начала отношений</p>
   <input type="password" id="pass" placeholder="ДДММГГГГ">
+  <p></p>
   <button class="yes" onclick="checkPass()">Открыть</button>
 </div>
 
@@ -169,7 +170,7 @@ button:active{
 
 <script>
 const PASSWORD = "20102025";
-const START_DATE = new Date("2025-10-20T00:22:57");
+const START_DATE = new Date("2025-10-20T22:57:00");
 
 const questions = [
   "Будешь моей Валентинкой, балам?",
@@ -179,7 +180,7 @@ const questions = [
   "Элькаа, ну биин"
 ];
 
-const finalNickname = "canım mənim";
+const finalNickname = "душа моя";
 let noClicks = 0;
 
 function go(id){
@@ -240,17 +241,22 @@ function finish(){
   document.body.classList.add("final-glow");
   hearts();
   document.getElementById("final").onclick = () => {
-    for(let i=0;i<10;i++){
+    let i = 0;
+    const spawnCount = 10;
+    const spawnInterval = setInterval(() => {
       const t = document.createElement("div");
       t.className = "love-text";
       t.textContent = "Я люблю тебя 💖";
-      t.style.left = 20 + Math.random()*60 + "vw";
-      t.style.fontSize = 16 + Math.random()*18 + "px";
-      t.style.animationDuration = 3 + Math.random()*2 + "s";
+      t.style.left = 20 + Math.random() * 60 + "vw";
+      t.style.fontSize = 16 + Math.random() * 18 + "px";
+      t.style.animationDuration = 3 + Math.random() * 2 + "s";
       t.style.opacity = 0.8;
       document.body.appendChild(t);
-      setTimeout(()=>t.remove(), 4000);
-    }
+      setTimeout(() => t.remove(), 4000);
+
+      i++;
+      if(i >= spawnCount) clearInterval(spawnInterval);
+    }, 350);
   }
 }
 
