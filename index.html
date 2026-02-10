@@ -90,7 +90,7 @@ button:active{
   font-size:18px;
 }
 
-.heart{
+.heart, .love-text{
   position:absolute;
   top:-20px;
   pointer-events:none;
@@ -112,6 +112,16 @@ button:active{
   border-radius: 20px;
   box-shadow: 0 16px 40px rgba(255,77,136,.5);
 }
+
+@keyframes glow {
+  0% { background: linear-gradient(135deg,#ffd6e8,#ffe6f2);}
+  50% { background: linear-gradient(135deg,#ffe6f2,#ffd6e8);}
+  100% { background: linear-gradient(135deg,#ffd6e8,#ffe6f2);}
+}
+
+.final-glow{
+  animation: glow 3s infinite alternate;
+}
 </style>
 </head>
 
@@ -121,7 +131,6 @@ button:active{
   <h2>Привет ❤️</h2>
   <p>Введи дату начала отношений</p>
   <input type="password" id="pass" placeholder="ДДММГГГГ">
-  <p></p> 
   <button class="yes" onclick="checkPass()">Открыть</button>
 </div>
 
@@ -215,6 +224,7 @@ noBtn.onclick = () => {
     yesBtn.style.transform = `scale(${1 + noClicks*0.15})`;
     noBtn.style.transform = `scale(${1 - noClicks*0.15})`;
     noBtn.style.opacity = 1 - noClicks*0.2;
+    if(navigator.vibrate) navigator.vibrate(60);
   } else {
     go("lastChance");
   }
@@ -227,7 +237,20 @@ function finish(){
   go("final");
   document.getElementById("finalText").textContent =
     `Урааа, я знал, что ты не ошибёшься с выбором, ${finalNickname} 💖`;
+  document.body.classList.add("final-glow");
   hearts();
+  document.getElementById("final").onclick = () => {
+    for(let i=0;i<10;i++){
+      const t = document.createElement("div");
+      t.className = "love-text";
+      t.textContent = "Я люблю тебя 💖";
+      t.style.left = Math.random()*100 + "vw";
+      t.style.fontSize = 14 + Math.random()*20 + "px";
+      t.style.animationDuration = 2 + Math.random()*2 + "s";
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(), 4000);
+    }
+  }
 }
 
 function hearts(){
